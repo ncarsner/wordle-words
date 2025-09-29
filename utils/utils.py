@@ -54,20 +54,12 @@ def find_scarce_letters(num=3):
 
 def remove_duplicate_words():
     original_count = len(word_list)
-    seen = set()
-    unique_words = []
-
-    for word in word_list:
-        if word not in seen:
-            seen.add(word)
-            unique_words.append(word)
-
-    word_list[:] = unique_words
+    word_list[:] = list(set(word_list))
     removed_count = original_count - len(word_list)
     print(f"Removed {removed_count} duplicates")
     print(f"Word list: {len(word_list)} unique words")
 
-    write_word_list_to_file()
+    sort_word_list()
 
 
 def sort_word_list():
