@@ -35,4 +35,4 @@ if __name__ == "__main__":
             print("Error: Please provide a valid number")
             print("Usage: python main.py [number_of_words]")
     else:
-        main()  # Use default value
+        main()

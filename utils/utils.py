@@ -19,36 +19,31 @@ def find_scarce_letters(num=3):
     least_used_letters = letters_counts.most_common()[:-num-1:-1]
     print(f"The {num} least common letters:")
     for letter, count in least_used_letters:
-        print(f"  {letter}: {count} occurrences")
+        print(f"  {letter.upper()}: {count} occurrences")
     return least_used_letters
 
 
 def remove_duplicate_words():
-    """Remove duplicate words from the word list in place"""
     original_count = len(word_list)
-    unique_words = list(set(word_list))
+    seen = set()
+    unique_words = []
+    
+    for word in word_list:
+        if word not in seen:
+            seen.add(word)
+            unique_words.append(word)
+    
     word_list[:] = unique_words
     removed_count = original_count - len(word_list)
-    print(f"Removed {removed_count} duplicate words")
-    print(f"Word list now has {len(word_list)} unique words")
+    print(f"Removed {removed_count} duplicates")
+    print(f"Word list: {len(word_list)} unique words")
     
-    # Write changes back to words.py
     write_word_list_to_file()
 
 
 def sort_word_list():
-    """Sort the word list alphabetically in place"""
-    original_first_word = word_list[0] if word_list else None
     word_list.sort()
-    new_first_word = word_list[0] if word_list else None
     
-    if original_first_word != new_first_word:
-        print("Word list sorted alphabetically")
-        print(f"First word changed from '{original_first_word}' to '{new_first_word}'")
-    else:
-        print("Word list was already sorted")
-    
-    # Write changes back to words.py
     write_word_list_to_file()
 
 
@@ -59,10 +54,10 @@ def write_word_list_to_file():
     with open(words_file, 'w') as f:
         f.write("word_list = [\n")
         for i, word in enumerate(word_list):
-            if i % 8 == 0 and i > 0:
+            if i % 10 == 0 and i > 0:
                 f.write("\n")
-            f.write(f"    '{word}',")
-        f.write("\n]\n\n# print(sorted(words))\n\n")
+            f.write(f" '{word}',")
+        f.write("\n]\n")
     
     print(f"Updated {words_file}")
 
@@ -79,8 +74,8 @@ def show_stats():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Examine and modify the Wordle word list")
     parser.add_argument("action", choices=[
-        "scarce-letters", 
-        "remove-duplicates", 
+        "find-scarce", 
+        "dedup", 
         "sort", 
         "stats"
     ], help="Action to perform on the word list")
@@ -92,9 +87,9 @@ if __name__ == "__main__":
     print(f"Current word list has {len(word_list)} words")
     print("-" * 50)
     
-    if args.action == "scarce-letters":
+    if args.action == "find-scarce":
         find_scarce_letters(args.num)
-    elif args.action == "remove-duplicates":
+    elif args.action == "dedup":
         remove_duplicate_words()
     elif args.action == "sort":
         sort_word_list()

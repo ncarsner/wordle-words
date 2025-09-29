@@ -73,21 +73,21 @@ python utils/utils.py stats
 - Number of duplicates
 - Whether the list is alphabetically sorted
 
-#### `scarce-letters` - Find Least Common Letters
+#### `find-scarce` - Find Least Common Letters
 Identify the least frequently used letters in the word list:
 ```bash
 # Find 3 least common letters (default)
-python utils/utils.py scarce-letters
+python utils/utils.py find-scarce
 
 # Find 5 least common letters
-python utils/utils.py scarce-letters --num 5
+python utils/utils.py find-scarce --num 5
 ```
 **Use case:** Helpful for Wordle strategy - these letters appear less frequently in the word list.
 
-#### `remove-duplicates` - Clean Duplicate Words
+#### `dedup` - Clean Duplicate Words
 Remove duplicate entries from the word list and update `words.py`:
 ```bash
-python utils/utils.py remove-duplicates
+python utils/utils.py dedup
 ```
 **⚠️ Note:** This modifies the `words.py` file in place.
 
@@ -105,11 +105,11 @@ python utils/utils.py sort
 python utils/utils.py stats
 
 # Clean up the word list
-python utils/utils.py remove-duplicates
+python utils/utils.py dedup
 python utils/utils.py sort
 
 # Analyze letter frequency for Wordle strategy
-python utils/utils.py scarce-letters --num 10
+python utils/utils.py find-scarce --num 10
 ```
 
 ### Help
