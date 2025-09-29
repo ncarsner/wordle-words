@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from random import shuffle
+import random
 
 # Add parent directory to sys.path to import words module
 sys.path.append(str(Path(__file__).parent.parent))
@@ -9,11 +9,10 @@ from words import word_list
 
 
 def main(num_words=5):
-    shuffle(word_list)
     used_letters = set()
     selected_words = []
 
-    for word in word_list:
+    for word in random.sample(word_list, len(word_list)):
         if not any(letter in used_letters for letter in word):
             selected_words.append(word)
             used_letters.update(word)
