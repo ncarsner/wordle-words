@@ -22,7 +22,6 @@ class WordListManager:
             print(f"Removed {removed_count} invalid words")
             words.word_list[:] = valid_words
             self.save_to_file()
-
         else:
             print("No invalid words found")
 
@@ -31,7 +30,6 @@ class WordListManager:
         least_used_letters = letters_counts.most_common()[: -num - 1 : -1]
         for letter, count in least_used_letters:
             print(f"  {letter.upper()}: {count} occurrences")
-        # return least_used_letters
 
     def remove_duplicates(self):
         original_count = len(words.word_list)
@@ -39,19 +37,15 @@ class WordListManager:
         removed_count = original_count - len(words.word_list)
         print(f"Removed {removed_count} duplicate words")
         print(f"Word list: {len(words.word_list)} unique words")
-
         self.sort_words()
 
     def sort_words(self):
         was_sorted = words.word_list == sorted(words.word_list)
         words.word_list.sort()
-
         if not was_sorted:
-            print("Word list sorted")
+            print("Word list sorted\n")
         else:
-            print("Word list was already sorted")
-
-        # Save after operation
+            print("Word list was already sorted\n")
         self.save_to_file()
 
     def add_word(self, word):
@@ -76,10 +70,7 @@ class WordListManager:
                 f.write(f" '{word}',")
             f.write("\n]\n")
 
-        print(f"Updated {words_file}")
-
     def show_stats(self):
-        """Show statistics about the word list"""
         print("Word list statistics:")
         print(f"  Total words:  {len(words.word_list):>5}")
         print(f"  Unique words: {len(set(words.word_list)):>5}")
@@ -121,13 +112,13 @@ def main():
     elif args.action == "sort":
         manager.sort_words()
     elif args.action == "add":
-        if args.word:
-            manager.add_word(args.word)
-        else:
+        if not args.word:
             print("Error: 'add' action requires a word argument\n")
+        else:
+            manager.add_word(args.word)
     elif args.action == "clean":
         manager.remove_invalid_words()
-        print("Clean operation completed\n")
+        print("Clean operation completed")
 
 
 if __name__ == "__main__":
