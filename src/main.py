@@ -1,11 +1,7 @@
 import sys
-from pathlib import Path
 import random
 
-# Add parent directory to sys.path to import words module
-sys.path.append(str(Path(__file__).parent.parent))
-
-from words import word_list
+from .words import word_list
 
 
 def main(num_words=5):
@@ -25,7 +21,6 @@ def main(num_words=5):
 
 
 if __name__ == "__main__":
-    # Accept command line argument for num_words
     if len(sys.argv) > 1:
         try:
             num_words = int(sys.argv[1])
