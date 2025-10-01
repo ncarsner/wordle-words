@@ -11,26 +11,26 @@ Run from the project root directory:
 
 ```bash
 # Generate default number of words (attempts 5, but may find fewer)
-python src/main.py
+python -m src.main
 
 # Generate specific number of words
-python src/main.py 3
-python src/main.py 4
-python src/main.py 10
+python -m src.main 3
+python -m src.main 4
+python -m src.main 10
 ```
 
 ### Examples
 
 ```bash
-$ python src/main.py 3
+$ python -m src.main 3
 Selected words: ['shuck', 'eagle', 'dizzy']
 Used letters: acdeghiklsuyz
 
-$ python src/main.py 4
+$ python -m src.main 4
 Selected words: ['jazzy', 'quill', 'detox']
 Used letters: adeilloqtuxy
 
-$ python src/main.py
+$ python -m src.main
 Selected words: ['adept', 'frown', 'silly']
 Used letters: adefilnoprstwy
 ```
@@ -57,7 +57,7 @@ This project includes command-line utilities to examine and modify the word list
 Run the utility from the project root directory:
 
 ```bash
-python utils/utils.py [command] [options]
+python -m src.utils [command] [options]
 ```
 
 ### Available Commands
@@ -65,7 +65,7 @@ python utils/utils.py [command] [options]
 #### `stats` - Show Word List Statistics
 Display comprehensive statistics about the current word list:
 ```bash
-python utils/utils.py stats
+python -m src.utils stats
 ```
 **Output includes:**
 - Total word count
@@ -77,24 +77,24 @@ python utils/utils.py stats
 Identify the least frequently used letters in the word list:
 ```bash
 # Find 3 least common letters (default)
-python utils/utils.py find-scarce
+python -m src.utils find-scarce
 
 # Find 5 least common letters
-python utils/utils.py find-scarce --num 5
+python -m src.utils find-scarce --num 5
 ```
 **Use case:** Helpful for Wordle strategy - these letters appear less frequently in the word list.
 
 #### `dedup` - Clean Duplicate Words
 Remove duplicate entries from the word list and update `words.py`:
 ```bash
-python utils/utils.py dedup
+python -m src.utils dedup
 ```
 **⚠️ Note:** This modifies the `words.py` file in place.
 
 #### `sort` - Alphabetically Sort Word List
 Sort the word list alphabetically and update `words.py`:
 ```bash
-python utils/utils.py sort
+python -m src.utils sort
 ```
 **⚠️ Note:** This modifies the `words.py` file in place.
 
@@ -102,19 +102,20 @@ python utils/utils.py sort
 
 ```bash
 # Check current status
-python utils/utils.py stats
+python -m src.utils stats
 
 # Clean up the word list
-python utils/utils.py dedup
-python utils/utils.py sort
+python -m src.utils clean
+python -m src.utils dedup
+python -m src.utils sort
 
 # Analyze letter frequency for Wordle strategy
-python utils/utils.py find-scarce --num 10
+python -m src.utils find-scarce --num 10
 ```
 
 ### Help
 
 For detailed command options:
 ```bash
-python utils/utils.py --help
+python -m src.utils --help
 ```
