@@ -27,7 +27,7 @@ class WordListManager:
 
     def find_scarce_letters(self, num=3):
         letters_counts = Counter("".join(words.word_list))
-        least_used_letters = letters_counts.most_common()[: -num - 1 : -1]
+        least_used_letters = letters_counts.most_common()[-num:]
         for letter, count in least_used_letters:
             print(f"  {letter.upper()}: {count} occurrences")
 
