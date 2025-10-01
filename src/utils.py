@@ -7,14 +7,14 @@ from . import words
 
 class WordListManager:
     def remove_invalid_words(self):
-        vowels = set("aeiouy")
+        VOWELS = set("aeiouy")
         original_count = len(words.word_list)
         valid_words = [
             word
             for word in words.word_list
             if len(word) == 5
             and word.isalpha()
-            and any(char in vowels for char in word)
+            and any(char in VOWELS for char in word)
         ]
         removed_count = original_count - len(valid_words)
 
@@ -27,7 +27,7 @@ class WordListManager:
 
     def find_scarce_letters(self, num=3):
         letters_counts = Counter("".join(words.word_list))
-        least_used_letters = letters_counts.most_common()[-num:]
+        least_used_letters = letters_counts.most_common()[:-num-1:-1]
         for letter, count in least_used_letters:
             print(f"  {letter.upper()}: {count} occurrences")
 
