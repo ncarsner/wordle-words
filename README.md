@@ -65,7 +65,7 @@ python -m src.utils [command] [options]
 #### `stats` - Show Word List Statistics
 Display comprehensive statistics about the current word list:
 ```bash
-python -m src.utils stats
+python -m src.main stats
 ```
 **Output includes:**
 - Total word count
@@ -77,24 +77,24 @@ python -m src.utils stats
 Identify the least frequently used letters in the word list:
 ```bash
 # Find 3 least common letters (default)
-python -m src.utils find-scarce
+python -m src.main find-scarce
 
 # Find 5 least common letters
-python -m src.utils find-scarce --num 5
+python -m src.main find-scarce --num 5
 ```
 **Use case:** Helpful for Wordle strategy - these letters appear less frequently in the word list.
 
 #### `dedup` - Clean Duplicate Words
 Remove duplicate entries from the word list and update `words.py`:
 ```bash
-python -m src.utils dedup
+python -m src.main dedup
 ```
 **⚠️ Note:** This modifies the `words.py` file in place.
 
 #### `sort` - Alphabetically Sort Word List
 Sort the word list alphabetically and update `words.py`:
 ```bash
-python -m src.utils sort
+python -m src.main sort
 ```
 **⚠️ Note:** This modifies the `words.py` file in place.
 
@@ -102,20 +102,20 @@ python -m src.utils sort
 
 ```bash
 # Check current status
-python -m src.utils stats
+python -m src.main stats
 
 # Clean up the word list
-python -m src.utils clean
-python -m src.utils dedup
-python -m src.utils sort
+python -m src.main clean
+python -m src.main dedup
+python -m src.main sort
 
 # Analyze letter frequency for Wordle strategy
-python -m src.utils find-scarce --num 10
+python -m src.main find-scarce --num 10
 ```
 
 ### Help
 
 For detailed command options:
 ```bash
-python -m src.utils --help
+python -m src.main --help
 ```
