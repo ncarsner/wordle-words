@@ -1,5 +1,4 @@
 import os
-import argparse
 from collections import Counter
 
 from . import words
@@ -40,12 +39,8 @@ class WordListManager:
         self.sort_words()
 
     def sort_words(self):
-        was_sorted = words.word_list == sorted(words.word_list)
         words.word_list.sort()
-        if not was_sorted:
-            print("Word list sorted\n")
-        else:
-            print("Word list was already sorted\n")
+        print("Word list sorted")
         self.save_to_file()
 
     def add_word(self, word):
@@ -72,54 +67,7 @@ class WordListManager:
 
     def show_stats(self):
         print("Word list statistics:")
-        print(f"  Total words:  {len(words.word_list):>5}")
-        print(f"  Unique words: {len(set(words.word_list)):>5}")
-        print(f"  Duplicates:   {len(words.word_list) - len(set(words.word_list)):>5}")
-        print(f"  List sorted:  {'Yes' if words.word_list == sorted(words.word_list) else 'No':>5}")
-
-
-def main():
-    parser = argparse.ArgumentParser(
-        description="Examine and modify the Wordle word list"
-    )
-    parser.add_argument(
-        "action",
-        choices=["find-scarce", "dedup", "sort", "stats", "add", "clean"],
-        help="Action to perform on the word list",
-    )
-    parser.add_argument(
-        "--num",
-        type=int,
-        default=3,
-        help="Number of scarce letters to find (default: 3)",
-    )
-    parser.add_argument(
-        "word", nargs="?", help="Word to add (required for 'add' action)"
-    )
-
-    args = parser.parse_args()
-
-    # Create word list manager instance
-    manager = WordListManager()
-
-    # Execute the requested action
-    if args.action == "stats":
-        manager.show_stats()
-    elif args.action == "find-scarce":
-        manager.find_scarce_letters(args.num)
-    elif args.action == "dedup":
-        manager.remove_duplicates()
-    elif args.action == "sort":
-        manager.sort_words()
-    elif args.action == "add":
-        if not args.word:
-            print("Error: 'add' action requires a word argument\n")
-        else:
-            manager.add_word(args.word)
-    elif args.action == "clean":
-        manager.remove_invalid_words()
-        print("Clean operation completed")
-
-
-if __name__ == "__main__":
-    main()
+        print(f"  Total words:    {len(words.word_list):>5,}")
+        print(f"  Unique words:   {len(set(words.word_list)):>5,}")
+        print(f"  Duplicates:     {len(words.word_list) - len(set(words.word_list)):>5,}")
+        print(f"  List sorted:    {'Yes' if words.word_list == sorted(words.word_list) else 'No':>5}")
