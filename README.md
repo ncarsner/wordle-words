@@ -57,7 +57,7 @@ This project includes command-line utilities to examine and modify the word list
 Run the utility from the project root directory:
 
 ```bash
-python -m src.utils [command] [options]
+python -m src.main [command] [options]
 ```
 
 ### Available Commands
