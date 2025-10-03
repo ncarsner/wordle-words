@@ -1,4 +1,4 @@
-from words import word_list
+from src.words import word_list
 
 
 def test_all_words_five_letters():

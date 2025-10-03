@@ -22,7 +22,7 @@ def main(num_words=5):
     print("Used letters:", "".join(sorted(used_letters)))
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     # Default behavior
     if len(sys.argv) <= 2 and (len(sys.argv) == 1 or sys.argv[1].isdigit()):
         num_words = int(sys.argv[1]) if len(sys.argv) == 2 else None
