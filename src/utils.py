@@ -1,17 +1,36 @@
 import os
-import argparse
 from collections import Counter
 
 from . import words
 
 
 class WordListManager:
+    def __init__(self, word_list=None, save_on_change=True):
+        if word_list is None:
+            self.word_list = words.word_list
+        else:
+            self.word_list = word_list
+        self.save_on_change = save_on_change
+        self._initial_state = None
+
+    def __enter__(self):
+        """Context manager entry - save initial state"""
+        self._initial_state = self.word_list.copy()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Context manager exit - save changes if any were made"""
+        if self.save_on_change and self._initial_state != self.word_list:
+            self.save_to_file()
+            print("Changes saved automatically")
+        return False  # Don't suppress exceptions
+
     def remove_invalid_words(self):
         VOWELS = set("aeiouy")
-        original_count = len(words.word_list)
+        original_count = len(self.word_list)
         valid_words = [
             word
-            for word in words.word_list
+            for word in self.word_list
             if len(word) == 5
             and word.isalpha()
             and any(char in VOWELS for char in word)
@@ -20,7 +39,7 @@ class WordListManager:
 
         if removed_count > 0:
             print(f"Removed {removed_count} invalid words")
-            words.word_list[:] = valid_words
+            self.word_list[:] = valid_words
             self.save_to_file()
         else:
             print("No invalid words found")
@@ -37,20 +56,15 @@ class WordListManager:
         removed_count = original_count - len(words.word_list)
         print(f"Removed {removed_count} duplicate words")
         print(f"Word list: {len(words.word_list)} unique words")
-        self.sort_words()
 
     def sort_words(self):
-        was_sorted = words.word_list == sorted(words.word_list)
-        words.word_list.sort()
-        if not was_sorted:
-            print("Word list sorted\n")
-        else:
-            print("Word list was already sorted\n")
+        self.word_list.sort()
+        print("Word list sorted")
         self.save_to_file()
 
     def add_word(self, word):
-        if word not in words.word_list:
-            words.word_list.append(word)
+        if word not in self.word_list:
+            self.word_list.append(word)
             print(f"Added '{word}' to word list")
             self.save_to_file()
             return True
@@ -59,6 +73,8 @@ class WordListManager:
             return False
 
     def save_to_file(self):
+        if not self.save_on_change:
+            return
         script_dir = os.path.dirname(os.path.abspath(__file__))
         words_file = os.path.join(script_dir, "words.py")
 
@@ -72,54 +88,7 @@ class WordListManager:
 
     def show_stats(self):
         print("Word list statistics:")
-        print(f"  Total words:  {len(words.word_list):>5}")
-        print(f"  Unique words: {len(set(words.word_list)):>5}")
-        print(f"  Duplicates:   {len(words.word_list) - len(set(words.word_list)):>5}")
-        print(f"  List sorted:  {'Yes' if words.word_list == sorted(words.word_list) else 'No':>5}")
-
-
-def main():
-    parser = argparse.ArgumentParser(
-        description="Examine and modify the Wordle word list"
-    )
-    parser.add_argument(
-        "action",
-        choices=["find-scarce", "dedup", "sort", "stats", "add", "clean"],
-        help="Action to perform on the word list",
-    )
-    parser.add_argument(
-        "--num",
-        type=int,
-        default=3,
-        help="Number of scarce letters to find (default: 3)",
-    )
-    parser.add_argument(
-        "word", nargs="?", help="Word to add (required for 'add' action)"
-    )
-
-    args = parser.parse_args()
-
-    # Create word list manager instance
-    manager = WordListManager()
-
-    # Execute the requested action
-    if args.action == "stats":
-        manager.show_stats()
-    elif args.action == "find-scarce":
-        manager.find_scarce_letters(args.num)
-    elif args.action == "dedup":
-        manager.remove_duplicates()
-    elif args.action == "sort":
-        manager.sort_words()
-    elif args.action == "add":
-        if not args.word:
-            print("Error: 'add' action requires a word argument\n")
-        else:
-            manager.add_word(args.word)
-    elif args.action == "clean":
-        manager.remove_invalid_words()
-        print("Clean operation completed")
-
-
-if __name__ == "__main__":
-    main()
+        print(f"  Total words:    {len(self.word_list):>5,}")
+        print(f"  Unique words:   {len(set(self.word_list)):>5,}")
+        print(f"  Duplicates:     {len(self.word_list) - len(set(self.word_list)):>5,}")
+        print(f"  List sorted:    {'Yes' if self.word_list == sorted(self.word_list) else 'No':>5}")
