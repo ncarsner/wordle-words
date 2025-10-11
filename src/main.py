@@ -80,4 +80,3 @@ if __name__ == "__main__": # pragma: no cover
                 manager.add_word(args.word)
         elif args.action == "clean":
             manager.remove_invalid_words()
-            print("Clean operation completed")
