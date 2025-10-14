@@ -5,7 +5,7 @@ from . import words
 
 
 class WordListManager:
-    def __init__(self, word_list=None, save_on_change=True):
+    def __init__(self, word_list: list[str] | None = None, save_on_change: bool = True) -> None:
         if word_list is None:
             # For production: work directly with the original words.word_list
             self.word_list = words.word_list
