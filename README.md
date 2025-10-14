@@ -23,16 +23,16 @@ python -m src.main 10
 
 ```bash
 $ python -m src.main 3
-Selected words: ['shuck', 'eagle', 'dizzy']
-Used letters: acdeghiklsuyz
+Selected words: ['clack', 'biter', 'found']
+Used letters: ABCDEF__I_KL_NO__R_TU_____
 
 $ python -m src.main 4
-Selected words: ['jazzy', 'quill', 'detox']
-Used letters: adeilloqtuxy
+Selected words: ['squad', 'glory', 'mimic', 'theft']
+Used letters: A_CDEFGHI__LM_O_QRSTU___Y_
 
 $ python -m src.main
-Selected words: ['adept', 'frown', 'silly']
-Used letters: adefilnoprstwy
+Selected words: ['regal', 'couch', 'ditty']
+Used letters: A_CDE_GHI__L__O__R_TU___Y_
 ```
 
 ### How It Works
