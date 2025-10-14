@@ -1,12 +1,13 @@
 import sys
 import random
 import argparse
+from string import ascii_lowercase
 
 from .utils import WordListManager
 from .words import word_list
 
 
-def main(num_words=5):
+def main(num_words=3):
     used_letters = set()
     selected_words = []
 
@@ -18,15 +19,16 @@ def main(num_words=5):
         if len(selected_words) == num_words:
             break
 
+    used_letters = "".join(letter if letter in used_letters else "_" for letter in ascii_lowercase)
+
     print("Selected words:", selected_words)
-    print("Used letters:", "".join(sorted(used_letters)))
+    print("Used letters:", used_letters.upper())
 
 
-if __name__ == "__main__": # pragma: no cover
-    # Default behavior
+if __name__ == "__main__":  # pragma: no cover
     if len(sys.argv) <= 2 and (len(sys.argv) == 1 or sys.argv[1].isdigit()):
         num_words = int(sys.argv[1]) if len(sys.argv) == 2 else None
-        main(num_words or 5)
+        main(num_words or 3)
         sys.exit(0)
 
     # Handle action commands and other arguments
@@ -34,49 +36,45 @@ if __name__ == "__main__": # pragma: no cover
         description="Examine and modify the Wordle word list",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    
-    parser.add_argument(
-        "action",
-        nargs="?",  # Optional
-        choices=["find-scarce", "dedup", "sort", "stats", "add", "clean"],
-        help="Action to perform on the word list"
-    )
-    parser.add_argument(
-        "--num",
-        type=int,
-        default=3,
-        help="Number of scarce letters to find (default: 3)"
-    )
-    parser.add_argument(
-        "word", 
-        nargs="?", 
-        help="Word to add (required for 'add' action)"
-    )
+
+    # parser = argparse.ArgumentParser(prog="python -m src.main")
+    subparsers = parser.add_subparsers(dest="action", required=False)
+
+    # Subcommands
+    stats_parser = subparsers.add_parser("stats", help="Show statistics")
+
+    dedup_parser = subparsers.add_parser("dedup", help="Remove duplicates")
+
+    sort_parser = subparsers.add_parser("sort", help="Sort the list")
+
+    clean_parser = subparsers.add_parser("clean", help="Remove invalid words")
+
+    find_parser = subparsers.add_parser("find-scarce", help="Find scarce letters")
+    find_parser.add_argument("--num", type=int, default=3)
+
+    add_parser = subparsers.add_parser("add", help="Add a word")
+    add_parser.add_argument("word", help="Word to add")
+
 
     args = parser.parse_args()
 
-    # If no action provided, generate words
-    if not args.action:
-        if args.word and args.word.isdigit():
-            main(int(args.word))
-        else:
-            main()
-    else:
-        manager = WordListManager()
-
-        if args.action == "stats":
+    manager = WordListManager()
+    match args.action:
+        case "stats":
             manager.show_stats()
-        elif args.action == "find-scarce":
+        case "find-scarce":
             manager.find_scarce_letters(args.num)
-        elif args.action == "dedup":
+        case "dedup":
             manager.remove_duplicates()
-        elif args.action == "sort":
+        case "sort":
             manager.sort_words()
-        elif args.action == "add":
+        case "add":
             if not args.word:
-                print("Error: 'add' action requires a word argument")
-                print("Usage: python -m src.main add <word>")
-            else:
-                manager.add_word(args.word)
-        elif args.action == "clean":
+                print("Error: No word provided to add.")
+                sys.exit(1)
+            manager.add_word(args.word)
+        case "clean":
             manager.remove_invalid_words()
+            print("Clean operation completed")
+        case _:
+            main(int(args.word)) if args.word and args.word.isdigit() else main()
