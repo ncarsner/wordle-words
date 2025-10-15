@@ -120,5 +120,5 @@ word_list = [
  'vivid', 'vomit', 'voter', 'waltz', 'weird', 'wench', 'whale', 'wharf', 'where', 'whiff',
  'whisk', 'whose', 'width', 'wiser', 'witch', 'witty', 'wound', 'wrath', 'wreak', 'wreck',
  'wrist', 'xenon', 'yacht', 'yeast', 'yield', 'young', 'youth', 'yummy', 'zappy', 'zebra',
- 'zesty', 'zilch', 'zippy', 'zonal', 'zoner', 'zones',
+ 'zesty', 'zilch', 'zippy', 'zonal', 'zoner', 'zones', 'help',
 ]
