@@ -141,7 +141,7 @@ wheels = [
 [[package]]
 name = "wordle-words"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 
 [package.dev-dependencies]
 dev = [
