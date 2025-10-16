@@ -5,7 +5,9 @@ from . import words
 
 
 class WordListManager:
-    def __init__(self, word_list: list[str] | None = None, save_on_change: bool = True) -> None:
+    def __init__(
+        self, word_list: list[str] | None = None, save_on_change: bool = True
+    ) -> None:
         if word_list is None:
             # For production: work directly with the original words.word_list
             self.word_list = words.word_list
@@ -62,7 +64,7 @@ class WordListManager:
     def find_scarce_letters(self, num=3):
         target_list = self.word_list if self.is_test_mode else words.word_list
         letters_counts = Counter("".join(target_list))
-        least_used_letters = letters_counts.most_common()[:-num-1:-1]
+        least_used_letters = letters_counts.most_common()[: -num - 1 : -1]
         for letter, count in least_used_letters:
             print(f"  {letter.upper()}: {count} occurrences")
 
@@ -70,7 +72,9 @@ class WordListManager:
         target_list = self.word_list if self.is_test_mode else words.word_list
         original_count = len(target_list)
         seen = set()
-        target_list[:] = [word for word in target_list if not (word in seen or seen.add(word))]
+        target_list[:] = [
+            word for word in target_list if not (word in seen or seen.add(word))
+        ]
         removed_count = original_count - len(target_list)
         print(f"Removed {removed_count} duplicate words")
         print(f"Word list: {len(target_list)} unique words")
@@ -116,4 +120,6 @@ class WordListManager:
         print(f"  Total words:    {len(target_list):>5,}")
         print(f"  Unique words:   {len(set(target_list)):>5,}")
         print(f"  Duplicates:     {len(target_list) - len(set(target_list)):>5,}")
-        print(f"  List sorted:    {'Yes' if target_list == sorted(target_list) else 'No':>5}")
+        print(
+            f"  List sorted:    {'Yes' if target_list == sorted(target_list) else 'No':>5}"
+        )

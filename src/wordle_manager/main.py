@@ -1,13 +1,13 @@
 import sys
 import random
-import argparse
 from string import ascii_lowercase
 
+from .cli import parse_args
 from .utils import WordListManager
 from .words import word_list
 
 
-def main(num_words=3):
+def run(num_words=3):
     used_letters = set()
     selected_words = []
 
@@ -19,46 +19,22 @@ def main(num_words=3):
         if len(selected_words) == num_words:
             break
 
-    used_letters = "".join(letter if letter in used_letters else "_" for letter in ascii_lowercase)
+    used_letters = "".join(
+        letter if letter in used_letters else "_" for letter in ascii_lowercase
+    )
 
     print("Selected words:", selected_words)
     print("Used letters:", used_letters.upper())
 
 
-if __name__ == "__main__":  # pragma: no cover
+def main():
     if len(sys.argv) <= 2 and (len(sys.argv) == 1 or sys.argv[1].isdigit()):
         num_words = int(sys.argv[1]) if len(sys.argv) == 2 else None
-        main(num_words or 3)
+        run(num_words or 3)
         sys.exit(0)
 
-    # Handle action commands and other arguments
-    parser = argparse.ArgumentParser(
-        description="Examine and modify the Wordle word list",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-    )
-
-    # parser = argparse.ArgumentParser(prog="python -m src.main")
-    subparsers = parser.add_subparsers(dest="action", required=False)
-
-    # Subcommands
-    stats_parser = subparsers.add_parser("stats", help="Show statistics")
-
-    dedup_parser = subparsers.add_parser("dedup", help="Remove duplicates")
-
-    sort_parser = subparsers.add_parser("sort", help="Sort the list")
-
-    clean_parser = subparsers.add_parser("clean", help="Remove invalid words")
-
-    find_parser = subparsers.add_parser("find-scarce", help="Find scarce letters")
-    find_parser.add_argument("--num", type=int, default=3)
-
-    add_parser = subparsers.add_parser("add", help="Add a word")
-    add_parser.add_argument("word", help="Word to add")
-
-
-    args = parser.parse_args()
-
     manager = WordListManager()
+    args = parse_args()
     match args.action:
         case "stats":
             manager.show_stats()
@@ -77,4 +53,5 @@ if __name__ == "__main__":  # pragma: no cover
             manager.remove_invalid_words()
             print("Clean operation completed")
         case _:
-            main(int(args.word)) if args.word and args.word.isdigit() else main()
+            word_arg = getattr(args, 'word', None)
+            run(int(word_arg)) if word_arg and str(word_arg).isdigit() else run()
