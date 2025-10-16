@@ -1,5 +1,5 @@
-from src.words import word_list
-from src.utils import WordListManager
+from src.wordle_manager.words import word_list
+from src.wordle_manager.utils import WordListManager
 import pytest
 
 

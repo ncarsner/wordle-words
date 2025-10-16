@@ -53,4 +53,5 @@ def main():
             manager.remove_invalid_words()
             print("Clean operation completed")
         case _:
-            run(int(args.word)) if args.word and args.word.isdigit() else run()
+            word_arg = getattr(args, 'word', None)
+            run(int(word_arg)) if word_arg and str(word_arg).isdigit() else run()
