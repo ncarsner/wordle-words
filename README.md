@@ -10,41 +10,41 @@ The core functionality is in `src/main.py` - it generates sets of 5-letter words
 Run from the project root directory:
 
 ```bash
-# Generate default number of words (attempts 5, but may find fewer)
-python -m src.main
+# Generate default number of words (attempts 3, but may find fewer)
+wordle
 
 # Generate specific number of words
-python -m src.main 3
-python -m src.main 4
-python -m src.main 10
+wordle 2
+wordle 4
+wordle 5
 ```
 
 ### Examples
 
 ```bash
-$ python -m src.main 3
-Selected words: ['shuck', 'eagle', 'dizzy']
-Used letters: acdeghiklsuyz
+$ wordle 3
+Selected words: ['clack', 'biter', 'found']
+Used letters: ABCDEF__I_KL_NO__R_TU_____
 
-$ python -m src.main 4
-Selected words: ['jazzy', 'quill', 'detox']
-Used letters: adeilloqtuxy
+$ wordle 4
+Selected words: ['squad', 'glory', 'mimic', 'theft']
+Used letters: A_CDEFGHI__LM_O_QRSTU___Y_
 
-$ python -m src.main
-Selected words: ['adept', 'frown', 'silly']
-Used letters: adefilnoprstwy
+$ wordle
+Selected words: ['regal', 'couch', 'ditty']
+Used letters: A_CDE_GHI__L__O__R_TU___Y_
 ```
 
 ### How It Works
 
-1. **Shuffles** the word list randomly for variety
+1. **Samples** the word list randomly for variety
 2. **Selects words** with no overlapping letters
 3. **Stops** when the requested number is reached or no more qualifying words exist
 4. **Displays** the selected words and all unique letters used (sorted a-z)
 
 ### Wordle Strategy Benefits
 
-- **Maximum letter coverage** - Each word uses completely different letters
+- **Maximum letter coverage** - Each word introduces different letters
 - **Efficient elimination** - Quickly narrow down possible answers
 - **Alphabet scanning** - Sorted letter output shows coverage gaps
 
@@ -57,7 +57,7 @@ This project includes command-line utilities to examine and modify the word list
 Run the utility from the project root directory:
 
 ```bash
-python -m src.main [command] [options]
+wordle [command] [options]
 ```
 
 ### Available Commands
@@ -65,7 +65,7 @@ python -m src.main [command] [options]
 #### `stats` - Show Word List Statistics
 Display comprehensive statistics about the current word list:
 ```bash
-python -m src.main stats
+wordle stats
 ```
 **Output includes:**
 - Total word count
@@ -77,24 +77,24 @@ python -m src.main stats
 Identify the least frequently used letters in the word list:
 ```bash
 # Find 3 least common letters (default)
-python -m src.main find-scarce
+wordle find-scarce
 
 # Find 5 least common letters
-python -m src.main find-scarce --num 5
+wordle find-scarce --num 5
 ```
 **Use case:** Helpful for Wordle strategy - these letters appear less frequently in the word list.
 
 #### `dedup` - Clean Duplicate Words
 Remove duplicate entries from the word list and update `words.py`:
 ```bash
-python -m src.main dedup
+wordle dedup
 ```
 **⚠️ Note:** This modifies the `words.py` file in place.
 
 #### `sort` - Alphabetically Sort Word List
 Sort the word list alphabetically and update `words.py`:
 ```bash
-python -m src.main sort
+wordle sort
 ```
 **⚠️ Note:** This modifies the `words.py` file in place.
 
@@ -102,20 +102,20 @@ python -m src.main sort
 
 ```bash
 # Check current status
-python -m src.main stats
+wordle stats
 
 # Clean up the word list
-python -m src.main clean
-python -m src.main dedup
-python -m src.main sort
+wordle clean
+wordle dedup
+wordle sort
 
 # Analyze letter frequency for Wordle strategy
-python -m src.main find-scarce --num 10
+wordle find-scarce --num 10
 ```
 
 ### Help
 
 For detailed command options:
 ```bash
-python -m src.main --help
+wordle --help
 ```
