@@ -1,13 +1,13 @@
 [project]
 name = "wordle-words"
 version = "0.1.0"
-description = "Add your description here"
+description = "Package for generating Wordle words"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = []
 
 [project.scripts]
-wordle = "wordle_manager.main:main"
+ww = "wordle_manager.main:main"
 
 [build-system]
 requires = ["hatchling"]

@@ -11,26 +11,26 @@ Run from the project root directory:
 
 ```bash
 # Generate default number of words (attempts 3, but may find fewer)
-wordle
+ww
 
 # Generate specific number of words
-wordle 2
-wordle 4
-wordle 5
+ww 2
+ww 4
+ww 5
 ```
 
 ### Examples
 
 ```bash
-$ wordle 3
+$ ww 3
 Selected words: ['clack', 'biter', 'found']
 Used letters: ABCDEF__I_KL_NO__R_TU_____
 
-$ wordle 4
+$ ww 4
 Selected words: ['squad', 'glory', 'mimic', 'theft']
 Used letters: A_CDEFGHI__LM_O_QRSTU___Y_
 
-$ wordle
+$ ww
 Selected words: ['regal', 'couch', 'ditty']
 Used letters: A_CDE_GHI__L__O__R_TU___Y_
 ```
@@ -57,7 +57,7 @@ This project includes command-line utilities to examine and modify the word list
 Run the utility from the project root directory:
 
 ```bash
-wordle [command] [options]
+ww [command] [options]
 ```
 
 ### Available Commands
@@ -65,7 +65,7 @@ wordle [command] [options]
 #### `stats` - Show Word List Statistics
 Display comprehensive statistics about the current word list:
 ```bash
-wordle stats
+ww stats
 ```
 **Output includes:**
 - Total word count
@@ -77,24 +77,24 @@ wordle stats
 Identify the least frequently used letters in the word list:
 ```bash
 # Find 3 least common letters (default)
-wordle find-scarce
+ww find-scarce
 
 # Find 5 least common letters
-wordle find-scarce --num 5
+ww find-scarce --num 5
 ```
 **Use case:** Helpful for Wordle strategy - these letters appear less frequently in the word list.
 
 #### `dedup` - Clean Duplicate Words
 Remove duplicate entries from the word list and update `words.py`:
 ```bash
-wordle dedup
+ww dedup
 ```
 **⚠️ Note:** This modifies the `words.py` file in place.
 
 #### `sort` - Alphabetically Sort Word List
 Sort the word list alphabetically and update `words.py`:
 ```bash
-wordle sort
+ww sort
 ```
 **⚠️ Note:** This modifies the `words.py` file in place.
 
@@ -102,20 +102,20 @@ wordle sort
 
 ```bash
 # Check current status
-wordle stats
+ww stats
 
 # Clean up the word list
-wordle clean
-wordle dedup
-wordle sort
+ww clean
+ww dedup
+ww sort
 
 # Analyze letter frequency for Wordle strategy
-wordle find-scarce --num 10
+ww find-scarce --num 10
 ```
 
 ### Help
 
 For detailed command options:
 ```bash
-wordle --help
+ww --help
 ```
