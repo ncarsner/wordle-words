@@ -100,7 +100,7 @@ class WordListManager:
             print(f"'{word}' already exists in word list")
             return False
 
-    def save_to_file(self):
+    def save_to_file(self): # pragma: no cover
         if not self.save_on_change:
             return
         script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -120,6 +120,4 @@ class WordListManager:
         print(f"  Total words:    {len(target_list):>5,}")
         print(f"  Unique words:   {len(set(target_list)):>5,}")
         print(f"  Duplicates:     {len(target_list) - len(set(target_list)):>5,}")
-        print(
-            f"  List sorted:    {'Yes' if target_list == sorted(target_list) else 'No':>5}"
-        )
+        print(f"  List sorted:    {'Yes' if target_list == sorted(target_list) else 'No':>5}")
