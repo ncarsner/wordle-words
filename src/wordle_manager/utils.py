@@ -120,6 +120,4 @@ class WordListManager:
         print(f"  Total words:    {len(target_list):>5,}")
         print(f"  Unique words:   {len(set(target_list)):>5,}")
         print(f"  Duplicates:     {len(target_list) - len(set(target_list)):>5,}")
-        print(
-            f"  List sorted:    {'Yes' if target_list == sorted(target_list) else 'No':>5}"
-        )
+        print(f"  List sorted:    {'Yes' if target_list == sorted(target_list) else 'No':>5}")
