@@ -34,3 +34,7 @@ omit = [
     "src/wordle_manager/__init__.py",
 ]
 
+[tool.coverage.report]
+exclude_lines = [
+    "def save_to_file",
+]

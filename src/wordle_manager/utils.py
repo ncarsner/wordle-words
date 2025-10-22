@@ -100,7 +100,7 @@ class WordListManager:
             print(f"'{word}' already exists in word list")
             return False
 
-    def save_to_file(self): # pragma: no cover
+    def save_to_file(self):
         if not self.save_on_change:
             return
         script_dir = os.path.dirname(os.path.abspath(__file__))
