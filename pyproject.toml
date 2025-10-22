@@ -3,6 +3,9 @@ name = "wordle-words"
 version = "0.1.0"
 description = "Package for generating Wordle words"
 readme = "README.md"
+authors = [
+    { name = "Nicholas Carsner", email = "nicholascarsner@gmail.com" }
+]
 requires-python = ">=3.13"
 dependencies = []
 
@@ -25,3 +28,9 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py", "tests.py"]
+
+[tool.coverage.run]
+omit = [
+    "src/wordle_manager/__init__.py",
+]
+
