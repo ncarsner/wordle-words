@@ -1,3 +1,5 @@
+import sys
+
 import pytest
 from unittest.mock import MagicMock
 
@@ -13,7 +15,9 @@ def safe_testing_environment():
     original_id = id(words.word_list)
 
     with pytest.MonkeyPatch.context() as monkeypatch:
-        monkeypatch.setattr(WordListManager, "save_to_file", lambda *args, **kwargs: None)
+        monkeypatch.setattr(
+            WordListManager, "save_to_file", lambda *args, **kwargs: None
+        )
         try:
             yield
         finally:
@@ -39,63 +43,72 @@ def mock_parse_args():
     "sys_argv, expected_action, setup_mocks, verify_calls",
     [
         pytest.param(
-            ["script_name", "5"], 
-            "run", 
+            ["script_name", "5"],
+            "run",
             lambda: None,  # No additional setup needed
             lambda mock_run, mock_manager: mock_run.assert_called_once_with(5),
-            id="run_with_number"
+            id="run_with_number",
         ),
         pytest.param(
-            ["script_name", "stats"], 
-            "stats", 
+            ["script_name", "stats"],
+            "stats",
             lambda: MagicMock(action="stats"),
             lambda mock_run, mock_manager: mock_manager.show_stats.assert_called_once(),
-            id="stats_action"
+            id="stats_action",
         ),
         pytest.param(
-            ["script_name", "find-scarce", "--num", "5"], 
-            "find-scarce", 
+            ["script_name", "find-scarce", "--num", "5"],
+            "find-scarce",
             lambda: MagicMock(action="find-scarce", num=5),
-            lambda mock_run, mock_manager: mock_manager.find_scarce_letters.assert_called_once_with(5),
-            id="find_scarce_action"
+            lambda mock_run,
+            mock_manager: mock_manager.find_scarce_letters.assert_called_once_with(5),
+            id="find_scarce_action",
         ),
         pytest.param(
-            ["script_name", "dedup"], 
-            "dedup", 
+            ["script_name", "dedup"],
+            "dedup",
             lambda: MagicMock(action="dedup"),
-            lambda mock_run, mock_manager: mock_manager.remove_duplicates.assert_called_once(),
-            id="dedup_action"
+            lambda mock_run,
+            mock_manager: mock_manager.remove_duplicates.assert_called_once(),
+            id="dedup_action",
         ),
         pytest.param(
-            ["script_name", "sort"], 
-            "sort", 
+            ["script_name", "sort"],
+            "sort",
             lambda: MagicMock(action="sort"),
             lambda mock_run, mock_manager: mock_manager.sort_words.assert_called_once(),
-            id="sort_action"
+            id="sort_action",
         ),
         pytest.param(
-            ["script_name", "add", "newword"], 
-            "add", 
+            ["script_name", "add", "newword"],
+            "add",
             lambda: MagicMock(action="add", word="newword"),
-            lambda mock_run, mock_manager: mock_manager.add_word.assert_called_once_with("newword"),
-            id="add_action"
+            lambda mock_run,
+            mock_manager: mock_manager.add_word.assert_called_once_with("newword"),
+            id="add_action",
         ),
     ],
 )
-def test_main_actions(sys_argv, expected_action, setup_mocks, verify_calls, monkeypatch):
+def test_main_actions(
+    sys_argv, expected_action, setup_mocks, verify_calls, monkeypatch
+):
     """Test main() with various actions"""
     mock_word_list_manager = MagicMock()
     mock_run = MagicMock()
-    
+
     # Mock the parse_args function if it's not a "run" action
     if expected_action != "run":
         mock_parse_args_result = setup_mocks()
-        monkeypatch.setattr("src.wordle_manager.main.parse_args", lambda: mock_parse_args_result)
-        monkeypatch.setattr("src.wordle_manager.main.WordListManager", lambda: mock_word_list_manager)
+        monkeypatch.setattr(
+            "src.wordle_manager.main.parse_args", lambda: mock_parse_args_result
+        )
+        monkeypatch.setattr(
+            "src.wordle_manager.main.WordListManager", lambda: mock_word_list_manager
+        )
     else:
         # For "run" action, mock the run function
         monkeypatch.setattr("src.wordle_manager.main.run", mock_run)
-    
+
     monkeypatch.setattr("sys.argv", sys_argv)
 
     if expected_action == "run":
@@ -112,6 +125,7 @@ def test_main_add_action_no_word_exits_with_error(mock_parse_args, capsys, monke
     mock_parse_args.action = "add"
     mock_parse_args.word = None
     monkeypatch.setattr("src.wordle_manager.main.parse_args", lambda: mock_parse_args)
+    monkeypatch.setattr(sys, "argv", ["prog", "add"])  # avoid numeric short-circuit
 
     with pytest.raises(SystemExit) as exc_info:
         main()
@@ -122,11 +136,16 @@ def test_main_add_action_no_word_exits_with_error(mock_parse_args, capsys, monke
     assert "Error: No word provided to add." in captured.out
 
 
-def test_main_clean_action(mock_word_list_manager, mock_parse_args, capsys, monkeypatch):
+def test_main_clean_action(
+    mock_word_list_manager, mock_parse_args, capsys, monkeypatch
+):
     """Test main() with clean action"""
     mock_parse_args.action = "clean"
     monkeypatch.setattr("src.wordle_manager.main.parse_args", lambda: mock_parse_args)
-    monkeypatch.setattr("src.wordle_manager.main.WordListManager", lambda: mock_word_list_manager)
+    monkeypatch.setattr(
+        "src.wordle_manager.main.WordListManager", lambda: mock_word_list_manager
+    )
+    monkeypatch.setattr(sys, "argv", ["prog", "clean"])  # avoids run()
 
     main()
 
@@ -141,6 +160,7 @@ def test_main_unknown_action_with_non_numeric_word_arg(mock_parse_args, monkeypa
     mock_parse_args.action = "unknown"
     mock_parse_args.word = "notanumber"
     monkeypatch.setattr("src.wordle_manager.main.parse_args", lambda: mock_parse_args)
+    monkeypatch.setattr(sys, "argv", ["prog", "unknown"])
 
     with pytest.MonkeyPatch.context() as monkeypatch:
         main()
