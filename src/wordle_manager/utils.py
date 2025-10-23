@@ -72,7 +72,8 @@ class WordListManager:
         removed_count = original_count - len(target_list)
         print(f"Removed {removed_count} duplicate words")
         print(f"Word list: {len(target_list)} unique words")
-        self.save_to_file()
+        if self.save_on_change:
+            self.save_to_file()
 
     def sort_words(self):
         target_list = self.word_list
