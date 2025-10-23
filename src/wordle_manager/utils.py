@@ -9,26 +9,21 @@ class WordListManager:
         self, word_list: list[str] | None = None, save_on_change: bool = True
     ) -> None:
         if word_list is None:
-            # For production: work directly with the original words.word_list
             self.word_list = words.word_list
-            self.is_test_mode = False
         else:
-            # For testing: work with provided test list
             self.word_list = word_list
-            self.is_test_mode = True
         self.save_on_change = save_on_change
         self._initial_state = None
 
     def __enter__(self):
         """Context manager entry - save initial state"""
-        if not self.is_test_mode:
-            self._initial_state = words.word_list.copy()
+        self._initial_state = self.word_list.copy()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Context manager exit - save changes if any were made"""
-        if self.save_on_change and not self.is_test_mode:
-            if self._initial_state != words.word_list:
+        if self.save_on_change:
+            if self._initial_state != self.word_list:
                 self.save_to_file()
                 print("Changes saved automatically")
         return False
@@ -42,34 +37,33 @@ class WordListManager:
 
     def remove_invalid_words(self):
         VOWELS = set("aeiouy")
-        target_list = self.word_list if self.is_test_mode else words.word_list
-        original_count = len(target_list)
+        original_count = len(self.word_list)
         valid_words = [
             word
-            for word in target_list
+            for word in self.word_list
             if len(word) == 5
             and word.isalpha()
             and any(char in VOWELS for char in word)
         ]
         removed_count = original_count - len(valid_words)
 
-        if removed_count > 0:
+        if removed_count:
             print(f"Removed {removed_count} invalid words")
-            target_list[:] = valid_words
-            if not self.is_test_mode:
-                self.save_to_file()
+            self.word_list[:] = valid_words
+            if self.save_on_change:
+                self.save_to_file()  # pragma: no cover
         else:
             print("No invalid words found")
 
     def find_scarce_letters(self, num=3):
-        target_list = self.word_list if self.is_test_mode else words.word_list
+        target_list = self.word_list
         letters_counts = Counter("".join(target_list))
         least_used_letters = letters_counts.most_common()[: -num - 1 : -1]
         for letter, count in least_used_letters:
             print(f"  {letter.upper()}: {count} occurrences")
 
     def remove_duplicates(self):
-        target_list = self.word_list if self.is_test_mode else words.word_list
+        target_list = self.word_list
         original_count = len(target_list)
         seen = set()
         target_list[:] = [
@@ -78,23 +72,20 @@ class WordListManager:
         removed_count = original_count - len(target_list)
         print(f"Removed {removed_count} duplicate words")
         print(f"Word list: {len(target_list)} unique words")
-        if not self.is_test_mode:
-            self.save_to_file()
+        self.save_to_file()
 
     def sort_words(self):
-        target_list = self.word_list if self.is_test_mode else words.word_list
+        target_list = self.word_list
         target_list.sort()
         print("Word list sorted")
-        if not self.is_test_mode:
-            self.save_to_file()
+        self.save_to_file()
 
     def add_word(self, word):
-        target_list = self.word_list if self.is_test_mode else words.word_list
+        target_list = self.word_list
         if word not in target_list:
             target_list.append(word)
             print(f"Added '{word}' to word list")
-            if not self.is_test_mode:
-                self.save_to_file()
+            self.save_to_file()
             return True
         else:
             print(f"'{word}' already exists in word list")
@@ -115,7 +106,7 @@ class WordListManager:
             f.write("\n]\n")
 
     def show_stats(self):
-        target_list = self.word_list if self.is_test_mode else words.word_list
+        target_list = self.word_list
         print("Word list statistics:")
         print(f"  Total words:    {len(target_list):>5,}")
         print(f"  Unique words:   {len(set(target_list)):>5,}")
