@@ -87,7 +87,8 @@ class WordListManager:
         if word not in target_list:
             target_list.append(word)
             print(f"Added '{word}' to word list")
-            self.save_to_file()
+            if self.save_on_change:
+                self.save_to_file()
             return True
         else:
             print(f"'{word}' already exists in word list")
