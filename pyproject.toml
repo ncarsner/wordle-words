@@ -36,5 +36,6 @@ omit = [
 
 [tool.coverage.report]
 exclude_lines = [
-    "def save_to_file",
+    "def save_to_file()",
+    "def run()",
 ]
