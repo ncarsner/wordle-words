@@ -1,13 +1,16 @@
 [project]
 name = "wordle-words"
 version = "0.1.0"
-description = "Add your description here"
+description = "Package for generating Wordle words"
 readme = "README.md"
+authors = [
+    { name = "Nicholas Carsner", email = "nicholascarsner@gmail.com" }
+]
 requires-python = ">=3.13"
 dependencies = []
 
 [project.scripts]
-wordle = "wordle_manager.main:main"
+ww = "wordle_manager.main:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -25,3 +28,13 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py", "tests.py"]
+
+[tool.coverage.run]
+omit = [
+    "src/wordle_manager/__init__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "def save_to_file",
+]
