@@ -79,7 +79,8 @@ class WordListManager:
         target_list = self.word_list
         target_list.sort()
         print("Word list sorted")
-        self.save_to_file()
+        if self.save_on_change:
+            self.save_to_file()
 
     def add_word(self, word):
         target_list = self.word_list
