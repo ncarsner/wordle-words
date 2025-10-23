@@ -162,5 +162,4 @@ def test_main_unknown_action_with_non_numeric_word_arg(mock_parse_args, monkeypa
     monkeypatch.setattr("src.wordle_manager.main.parse_args", lambda: mock_parse_args)
     monkeypatch.setattr(sys, "argv", ["prog", "unknown"])
 
-    with pytest.MonkeyPatch.context() as monkeypatch:
-        main()
+    main()
