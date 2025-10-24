@@ -83,7 +83,6 @@ def mock_parse_args():
     ],
 )
 def test_main_actions(sys_argv, expected_action, setup_mocks, verify_calls, monkeypatch):
-    """Test main() with various actions"""
     mock_word_list_manager = MagicMock()
     mock_run = MagicMock()
     
@@ -112,6 +111,8 @@ def test_main_add_action_no_word_exits_with_error(mock_parse_args, capsys, monke
     mock_parse_args.action = "add"
     mock_parse_args.word = None
     monkeypatch.setattr("src.wordle_manager.main.parse_args", lambda: mock_parse_args)
+    # Ensure sys.argv doesn't trigger the run() branch
+    monkeypatch.setattr("sys.argv", ["script", "add"])
 
     with pytest.raises(SystemExit) as exc_info:
         main()
@@ -123,10 +124,11 @@ def test_main_add_action_no_word_exits_with_error(mock_parse_args, capsys, monke
 
 
 def test_main_clean_action(mock_word_list_manager, mock_parse_args, capsys, monkeypatch):
-    """Test main() with clean action"""
     mock_parse_args.action = "clean"
     monkeypatch.setattr("src.wordle_manager.main.parse_args", lambda: mock_parse_args)
     monkeypatch.setattr("src.wordle_manager.main.WordListManager", lambda: mock_word_list_manager)
+    # Ensure sys.argv doesn't trigger the run() branch
+    monkeypatch.setattr("sys.argv", ["script", "clean"])
 
     main()
 
@@ -137,10 +139,10 @@ def test_main_clean_action(mock_word_list_manager, mock_parse_args, capsys, monk
 
 
 def test_main_unknown_action_with_non_numeric_word_arg(mock_parse_args, monkeypatch):
-    """Test main() with unknown action and non-numeric word argument"""
     mock_parse_args.action = "unknown"
     mock_parse_args.word = "notanumber"
     monkeypatch.setattr("src.wordle_manager.main.parse_args", lambda: mock_parse_args)
+    # Ensure sys.argv doesn't trigger the run() branch
+    monkeypatch.setattr("sys.argv", ["script", "unknown", "notanumber"])
 
-    with pytest.MonkeyPatch.context() as monkeypatch:
-        main()
+    main()

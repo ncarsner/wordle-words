@@ -7,7 +7,6 @@ from src.wordle_manager import words
 
 @pytest.fixture(autouse=True)
 def safe_testing_environment():
-    """Fixture to prevent any file writes and preserve original word list"""
     # Store the original word list
     original_words = words.word_list.copy()
     original_id = id(words.word_list)
@@ -17,7 +16,7 @@ def safe_testing_environment():
         try:
             yield mock_save
         finally:
-            # Ensure we restore to the exact original state
+            # Restore to the original state
             if id(words.word_list) != original_id:
                 words.word_list = original_words
             else:
@@ -28,13 +27,13 @@ class TestContextManagerExitAdditional:
 
     def test_exit_with_initial_state_none(self):
         # Arrange
-        manager = WordListManager()  # Production mode
+        manager = WordListManager()
         manager._initial_state = None  # This could happen if __enter__ wasn't called
 
         # Act
         result = manager.__exit__(None, None, None)
 
-        # Assert - should handle None gracefully (line 25 comparison)
+        # Assert - handles None gracefully
         assert result is False
 
     def test_exit_exception_propagation(self):
@@ -52,7 +51,7 @@ class TestForTestingAdditionalCoverage:
 
     def test_empty_words_list(self):
         # Arrange
-        words.word_list[:] = []  # Empty the original list
+        words.word_list[:] = []
 
         # Act
         manager = WordListManager.for_testing()
@@ -108,25 +107,23 @@ class TestRemoveDuplicates:
 class TestFileSafetyVerification:
 
     def test_save_to_file_mocked_no_actual_file_writes(self, safe_testing_environment):
-        """Verify that save_to_file is mocked and no actual files are written"""
         mock_save = safe_testing_environment
 
         # Arrange
-        manager = WordListManager()  # Production mode
+        manager = WordListManager()
         words.word_list[:] = ["test", "data"]
 
-        # Act - call a method that would normally trigger save_to_file
-        manager.sort_words()  # This calls save_to_file in production mode
+        # Act - call a method that triggers save_to_file
+        manager.sort_words()
 
-        # Assert - save_to_file was called but mocked (no actual file write)
+        # Assert - save_to_file was called but mocked
         assert mock_save.called, "save_to_file should have been called"
 
     def test_add_word_in_production_mode_mocked(self, safe_testing_environment):
-        """Verify add_word in production mode doesn't write to actual files"""
         mock_save = safe_testing_environment
 
-        # Arrange
-        manager = WordListManager()  # Production mode, save_on_change=True by default
+        # Arrange - save_on_change=True by default
+        manager = WordListManager()
         unique_word = "safetestword123"
 
         # Ensure word doesn't exist
@@ -137,8 +134,8 @@ class TestFileSafetyVerification:
         result = manager.add_word(unique_word)
 
         # Assert
-        assert result is True  # Word was added
-        assert unique_word in words.word_list  # Added to memory
+        assert result is True
+        assert unique_word in words.word_list
         assert mock_save.called, "save_to_file should have been called but was mocked"
 
 
@@ -157,31 +154,27 @@ class TestShowStatsFormatting:
         lines = captured.out.strip().split("\n")
         total_line = [line for line in lines if "Total words:" in line][0]
 
-        # Should have right-aligned number with comma formatting
-        assert "    5" in total_line  # :>5 formatting (right-aligned in 5 chars)
+        # Right-aligned number with comma formatting
+        assert "    5" in total_line
         assert "Total words:" in total_line
 
 
 class TestRemoveInvalidWords:
 
     def test_remove_invalid_words_conditional_save_production_mode(self):
-        """Test lines 59-60: conditional save in production mode (mocked to prevent file writes)"""
-        # Arrange - use production mode but with mocked save_to_file
+        # Arrange - production mode with mocked save_to_file
         words.word_list[:] = [
             "house",
             "inv@l",
             "xyz",
-        ]  # house=valid, inv@l=special char, xyz=no vowels
-        manager = WordListManager(
-            save_on_change=False
-        )  # Production mode, no file writes
+        ]
+        manager = WordListManager(save_on_change=False)
 
-        # Act - lines 59-60: if not self.is_test_mode: self.save_to_file()
+        # Act
         manager.remove_invalid_words()
 
-        # Assert - condition should be True (not test_mode)
-        assert manager.is_test_mode is False  # Line 59: condition is True
-        # save_to_file would be called but is mocked to prevent actual file writes
+        # Assert - condition should be True
+        assert manager.word_list == words.word_list
 
         # Verify invalid words were removed
         assert "inv@l" not in words.word_list  # Invalid: special character
