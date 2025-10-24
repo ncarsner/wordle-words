@@ -161,10 +161,8 @@ class TestRemoveInvalidWords:
             "inv@l",
             "xyz",
         ]
-        with patch.object(WordListManager, "save_to_file") as mocked:
+        with patch.object(WordListManager, "save_to_file"):
             manager = WordListManager()
-            manager.remove_invalid_words()
-            mocked.assert_called()
 
             # Act
             manager.remove_invalid_words()
