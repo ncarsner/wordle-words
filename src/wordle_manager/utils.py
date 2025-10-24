@@ -50,8 +50,8 @@ class WordListManager:
         if removed_count:
             print(f"Removed {removed_count} invalid words")
             self.word_list[:] = valid_words
-            if self.save_on_change:
-                self.save_to_file()  # pragma: no cover
+            if self.save_on_change: # pragma: no cover
+                self.save_to_file()
         else:
             print("No invalid words found")
 
