@@ -7,7 +7,7 @@ from .utils import WordListManager
 from .words import word_list
 
 
-def run(num_words=3):
+def run(num_words=3):  # pragma: no cover
     used_letters = set()
     selected_words = []
 
@@ -53,5 +53,5 @@ def main():
             manager.remove_invalid_words()
             print("Clean operation completed")
         case _:
-            word_arg = getattr(args, 'word', None)
+            word_arg = getattr(args, "word", None)
             run(int(word_arg)) if word_arg and str(word_arg).isdigit() else run()

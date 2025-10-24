@@ -24,7 +24,6 @@ def safe_testing_environment():
 
 
 class TestContextManagerExitAdditional:
-
     def test_exit_with_initial_state_none(self):
         # Arrange
         manager = WordListManager()
@@ -48,7 +47,6 @@ class TestContextManagerExitAdditional:
 
 
 class TestForTestingAdditionalCoverage:
-
     def test_empty_words_list(self):
         # Arrange
         words.word_list[:] = []
@@ -63,7 +61,6 @@ class TestForTestingAdditionalCoverage:
 
 
 class TestFindScarceLetters:
-
     def test_find_scarce_letters_production_vs_test_mode(self, capsys):
         # Test mode case
         test_words = ["test", "mode"]
@@ -82,7 +79,6 @@ class TestFindScarceLetters:
 
 
 class TestRemoveDuplicates:
-
     def test_remove_duplicates_production_vs_test_mode(self):
         # Arrange - add duplicates for production test
         words.word_list.extend(["test_dup", "test_dup"])
@@ -105,7 +101,6 @@ class TestRemoveDuplicates:
 
 
 class TestFileSafetyVerification:
-
     def test_save_to_file_mocked_no_actual_file_writes(self, safe_testing_environment):
         mock_save = safe_testing_environment
 
@@ -140,7 +135,6 @@ class TestFileSafetyVerification:
 
 
 class TestShowStatsFormatting:
-
     def test_show_stats_total_words_formatting(self, capsys):
         # Arrange
         test_words = ["word1", "word2", "word3", "word4", "word5"]
@@ -160,7 +154,6 @@ class TestShowStatsFormatting:
 
 
 class TestRemoveInvalidWords:
-
     def test_remove_invalid_words_conditional_save_production_mode(self):
         # Arrange - production mode with mocked save_to_file
         words.word_list[:] = [
@@ -168,15 +161,18 @@ class TestRemoveInvalidWords:
             "inv@l",
             "xyz",
         ]
-        manager = WordListManager(save_on_change=False)
+        with patch.object(WordListManager, "save_to_file") as mocked:
+            manager = WordListManager()
+            manager.remove_invalid_words()
+            mocked.assert_called()
 
-        # Act
-        manager.remove_invalid_words()
+            # Act
+            manager.remove_invalid_words()
 
-        # Assert - condition should be True
-        assert manager.word_list == words.word_list
+            # Assert - condition should be True
+            assert manager.word_list == words.word_list
 
-        # Verify invalid words were removed
-        assert "inv@l" not in words.word_list  # Invalid: special character
-        assert "xyz" not in words.word_list  # Invalid: no vowels
-        assert "house" in words.word_list  # Valid: 5 letters, alpha, has vowels
+            # Verify invalid words were removed
+            assert "inv@l" not in words.word_list  # Invalid: special character
+            assert "xyz" not in words.word_list  # Invalid: no vowels
+            assert "house" in words.word_list  # Valid: 5 letters, alpha, has vowels
