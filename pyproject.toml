@@ -33,10 +33,3 @@ python_files = ["test_*.py", "*_test.py", "tests.py"]
 omit = [
     "src/wordle_manager/__init__.py",
 ]
-
-[tool.coverage.report]
-exclude_lines = [
-    "def save_to_file()",
-    "def run()",
-    "pragma: no cover",
-]
