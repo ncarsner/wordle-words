@@ -146,3 +146,26 @@ def test_main_unknown_action_with_non_numeric_word_arg(mock_parse_args, monkeypa
     monkeypatch.setattr("sys.argv", ["script", "unknown", "notanumber"])
 
     main()
+
+
+def test_main_unique_letters_flag(monkeypatch):
+    mock_run = MagicMock()
+    monkeypatch.setattr("src.wordle_manager.main.run", mock_run)
+    monkeypatch.setattr("sys.argv", ["script_name", "-u"])
+
+    with pytest.raises(SystemExit) as exc_info:
+        main()
+    assert exc_info.value.code == 0
+
+    mock_run.assert_called_once_with(3, unique_letters=True)
+
+def test_main_numeric_arg_with_unique_letters_flag(monkeypatch):
+    mock_run = MagicMock()
+    monkeypatch.setattr("src.wordle_manager.main.run", mock_run)
+    monkeypatch.setattr("sys.argv", ["script_name", "2", "-u"])
+
+    with pytest.raises(SystemExit) as exc_info:
+        main()
+    assert exc_info.value.code == 0
+
+    mock_run.assert_called_once_with(2, unique_letters=True)

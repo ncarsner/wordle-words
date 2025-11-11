@@ -17,6 +17,10 @@ ww
 ww 2
 ww 4
 ww 5
+
+# Generate words with no repeating letters
+ww 3 -u
+ww -u
 ```
 
 ### Examples
@@ -33,6 +37,18 @@ Used letters: A_CDEFGHI__LM_O_QRSTU___Y_
 $ ww
 Selected words: ['regal', 'couch', 'ditty']
 Used letters: A_CDE_GHI__L__O__R_TU___Y_
+
+$ ww 4 -u
+Selected words: ['frail', 'wench', 'judgy', 'stomp']
+Used letters: A_CDEFGHIJ_LMNOP_RSTU_W_Y_
+
+$ ww 2 -u
+Selected words: ['mango', 'build']
+Used letters: AB_D__G_I__LMNO_____U_____
+
+$ ww -u
+Selected words: ['clean', 'ivory', 'thump']
+Used letters: A_C_E__HI__LMNOP_R_TUV__Y_
 ```
 
 ### How It Works

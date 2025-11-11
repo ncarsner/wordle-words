@@ -8,6 +8,22 @@ def parse_args():
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
+    # Add flag for unique letters (no repeating letters within words)
+    parser.add_argument(
+        "-u",
+        action="store_true",
+        help="Only select words with unique letters (no repeating letters within each word)"
+    )
+    
+    # Add optional positional argument for number of words
+    parser.add_argument(
+        "num_words",
+        nargs="?",
+        type=int,
+        default=3,
+        help="Number of words to generate (default: 3)"
+    )
+
     subparsers = parser.add_subparsers(dest="action", required=False)
     subparsers.add_parser("stats", help="Show statistics")
     subparsers.add_parser("dedup", help="Remove duplicates")

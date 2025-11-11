@@ -3,6 +3,8 @@ from collections import Counter
 
 from . import words
 
+def has_repeating_letters(word):
+    return len(set(word)) != len(word)
 
 class WordListManager:
     def __init__(
