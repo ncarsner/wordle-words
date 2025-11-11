@@ -16,8 +16,6 @@ def run(num_words=3, unique_letters=None):
     available_words = word_list
     if unique_letters:
         available_words = [word for word in word_list if not has_repeating_letters(word)]
-        # print(f"Filtering to words with no repeating letters ({len(available_words)} available)")
-
     for word in random.sample(available_words, len(available_words)):
         if not any(letter in used_letters for letter in word):
             selected_words.append(word)
