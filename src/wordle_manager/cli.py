@@ -15,12 +15,13 @@ def parse_args():
         help="Only select words with unique letters (no repeating letters within each word)"
     )
     
-    # Add optional positional argument for number of words
+    # Add optional flag for number of words
     parser.add_argument(
-        "num_words",
-        nargs="?",
+        "-n",
         type=int,
         default=3,
+        dest="num_words",
+        metavar="NUM",
         help="Number of words to generate (default: 3)"
     )
 
