@@ -3,7 +3,7 @@ App to generate an array of 5-letter words all with unique letters, to propose e
 
 ## Main Word Generator
 
-The core functionality is in `src/main.py` - it generates sets of 5-letter words where **no letter appears in multiple words**. This is perfect for Wordle strategy as it maximizes letter coverage.
+The core functionality generates sets of 5-letter words where **no letter appears in multiple words**. This is perfect for Wordle strategy as it maximizes letter coverage.
 
 ### Usage
 
