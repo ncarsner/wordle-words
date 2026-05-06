@@ -12,9 +12,9 @@ def parse_args():
     parser.add_argument(
         "-u",
         action="store_true",
-        help="Only select words with unique letters (no repeating letters within each word)"
+        help="Only select words with unique letters (no repeating letters within each word)",
     )
-    
+
     # Add optional flag for number of words
     parser.add_argument(
         "-n",
@@ -22,7 +22,7 @@ def parse_args():
         default=3,
         dest="num_words",
         metavar="NUM",
-        help="Number of words to generate (default: 3)"
+        help="Number of words to generate (default: 3)",
     )
 
     subparsers = parser.add_subparsers(dest="action", required=False)

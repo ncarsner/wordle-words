@@ -1,4 +1,5 @@
 import pytest
+
 from src.wordle_manager.cli import parse_args
 
 

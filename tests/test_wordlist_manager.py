@@ -1,8 +1,9 @@
-import pytest
 from unittest.mock import patch
 
-from src.wordle_manager.utils import WordListManager
+import pytest
+
 from src.wordle_manager import words
+from src.wordle_manager.utils import WordListManager
 
 
 @pytest.fixture(autouse=True)

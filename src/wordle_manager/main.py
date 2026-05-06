@@ -1,5 +1,5 @@
-import sys
 import random
+import sys
 from string import ascii_lowercase
 
 from .cli import parse_args
@@ -10,11 +10,13 @@ from .words import word_list
 def run(num_words=3, unique_letters=None):
     used_letters = set()
     selected_words = []
-    
+
     # Filter word list if unique letters flag is set
     available_words = word_list
     if unique_letters is not None:
-        available_words = [word for word in word_list if not has_repeating_letters(word)]
+        available_words = [
+            word for word in word_list if not has_repeating_letters(word)
+        ]
     for word in random.sample(available_words, len(available_words)):
         if not any(letter in used_letters for letter in word):
             selected_words.append(word)
@@ -36,19 +38,19 @@ def main():
     # Transform 'ww 3 -u' into 'ww -n 3 -u' for argparse
     if len(sys.argv) > 1 and sys.argv[1].isdigit():
         num = sys.argv[1]
-        sys.argv = [sys.argv[0]] + ['-n', num] + sys.argv[2:]
-    
+        sys.argv = [sys.argv[0]] + ["-n", num] + sys.argv[2:]
+
     args = parse_args()
-    
+
     # If no action specified, run word selection
     if not args.action:
         num_words = args.num_words
         run(num_words, unique_letters=args.u)
         return
-    
+
     # Handle management actions
     manager = WordListManager()
-    
+
     match args.action:
         case "stats":
             manager.show_stats()

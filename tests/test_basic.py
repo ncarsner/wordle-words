@@ -1,6 +1,7 @@
-from src.wordle_manager.words import word_list
-from src.wordle_manager.utils import WordListManager
 import pytest
+
+from src.wordle_manager.utils import WordListManager
+from src.wordle_manager.words import word_list
 
 
 @pytest.fixture
@@ -41,4 +42,6 @@ def test_remove_invalid_words(word_list_manager):
     word_list_manager.remove_invalid_words()
     assert all(len(word) == 5 for word in word_list_manager.word_list)
     assert all(word.isalpha() for word in word_list_manager.word_list)
-    assert all(any(char in "aeiouy" for char in word) for word in word_list_manager.word_list)
+    assert all(
+        any(char in "aeiouy" for char in word) for word in word_list_manager.word_list
+    )

@@ -1,9 +1,10 @@
-import pytest
 from unittest.mock import MagicMock
 
+import pytest
+
+from src.wordle_manager import words
 from src.wordle_manager.main import main
 from src.wordle_manager.utils import WordListManager, has_repeating_letters
-from src.wordle_manager import words
 
 
 @pytest.fixture(autouse=True)
@@ -44,8 +45,10 @@ def mock_parse_args():
             ["script_name", "5"],
             "run",
             lambda: None,  # No additional setup needed
-            lambda mock_run, mock_manager: mock_run.assert_called_once_with(5, unique_letters=False),
-            id="run_with_number"
+            lambda mock_run, mock_manager: mock_run.assert_called_once_with(
+                5, unique_letters=False
+            ),
+            id="run_with_number",
         ),
         pytest.param(
             ["script_name", "stats"],
@@ -168,6 +171,7 @@ def test_main_unique_letters_flag(monkeypatch):
 
     mock_run.assert_called_once_with(3, unique_letters=True)
 
+
 def test_main_numeric_arg_with_unique_letters_flag(monkeypatch):
     mock_run = MagicMock()
     monkeypatch.setattr("src.wordle_manager.main.run", mock_run)
@@ -177,15 +181,19 @@ def test_main_numeric_arg_with_unique_letters_flag(monkeypatch):
 
     mock_run.assert_called_once_with(2, unique_letters=True)
 
-@pytest.mark.parametrize("word, expected", [
-    ("spill", True),  # 'l' repeats
-    ("ladle", True),  # 'l' repeats
-    ("apple", True),  # 'p' repeats
-    ("crumb", False),
-    ("brown", False),
-    ("mango", False),
-    ("spicy", False),
-])
+
+@pytest.mark.parametrize(
+    "word, expected",
+    [
+        ("spill", True),  # 'l' repeats
+        ("ladle", True),  # 'l' repeats
+        ("apple", True),  # 'p' repeats
+        ("crumb", False),
+        ("brown", False),
+        ("mango", False),
+        ("spicy", False),
+    ],
+)
 def test_has_repeating_letters(word, expected):
     assert has_repeating_letters(word) is expected
     assert has_repeating_letters("spicy") is False
